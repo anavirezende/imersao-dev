@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="./assets/logo.png" alt="QA Insights Logo" width="150">
-</p>
-
 <h1 align="center">QA Insights - Base de Conhecimento Interativa</h1>
 
 <p align="center">
