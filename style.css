@@ -1,0 +1,582 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Gurmukhi:wght@300;400;500;600&display=swap');
+
+* {
+    box-sizing: border-box; /* Garante que padding e border não aumentem o tamanho total do elemento */
+}
+
+:root {
+    --primary-color: #8ab4f8; /* Cor primária (azul claro) */
+    --aurora-gradient: linear-gradient(90deg, #00bcd4, #8ab4f8, #9c27b0, #00bcd4);
+    --card-bg-color: #2d2e31; /* Cor de fundo para os cards */
+    --accent-color-vibrant: #00bcd4; /* Ciano vibrante para destaques */
+    --secondary-color: #e8eaed; /* Cor secundária (cinza claro) */
+    --tertiary-color: #9aa0a6; /* Cor terciária (cinza médio) */
+    --bg-color: #202124; /* Cor de fundo (cinza escuro) */
+    --header-bg: rgba(32, 33, 36, 0.8); /* Fundo do cabeçalho */
+    --header-border: #3c4043; /* Borda do cabeçalho */
+    --footer-border: #3c4043; /* Borda do rodapé */
+}
+
+/* Variáveis para o modo claro */
+body.light-mode {
+    --primary-color: #0d6efd; /* Azul padrão do Bootstrap */
+    --aurora-gradient: linear-gradient(90deg, #0dcaf0, #0d6efd, #6f42c1, #0dcaf0);
+    --card-bg-color: #f8f9fa; /* Cinza muito claro para os cards */
+    --accent-color-vibrant: #0dcaf0; /* Ciano mais claro */
+    --secondary-color: #212529; /* Texto escuro */
+    --tertiary-color: #6c757d; /* Cinza para placeholders */
+    --bg-color: #ffffff; /* Fundo branco puro */
+    --header-bg: rgba(248, 249, 250, 0.8); /* Fundo do cabeçalho claro */
+    --header-border: #dee2e6; /* Borda do cabeçalho clara */
+    --footer-border: #dee2e6; /* Borda do rodapé clara */
+
+    /* Sobrescreve a cor do botão de busca para ter contraste */
+    --botao-busca-bg: #e9ecef;
+
+    /* Desativa o padrão de pontos no modo claro */
+    background-image: none;
+    background-blend-mode: normal;
+}
+
+body {
+    margin: 0; /* Remove a margem padrão do body */
+    background-color: var(--bg-color); /* Define a cor de fundo usando uma variável */
+    color: var(--secondary-color); /* Define a cor do texto padrão usando uma variável */
+    /* Adiciona um padrão de pontos sutis ao fundo */
+    background-image: radial-gradient(var(--tertiary-color) 1px, transparent 0);
+    background-size: 40px 40px;
+    background-position: -19px -19px;
+    /* Garante que o fundo principal permaneça escuro */
+    background-blend-mode: multiply;
+    background-attachment: fixed;
+    scroll-padding-top: 12rem; /* Ajusta o padding para o novo tamanho do header */
+    font-family: "Anek Gurmukhi", sans-serif; /* Define a família da fonte */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light-mode .footer-links a {
+    background-color: #e9ecef;
+}
+
+/* Quando um card está focado, escurece o fundo e trava o scroll do body */
+body.card-focado {
+    overflow: hidden;
+    background-image: none;
+    background-color: #17181a; /* Um tom ainda mais escuro para focar no card */
+}
+
+body.light-mode.card-focado {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+header {
+    padding: 2rem 1rem; /* Espaçamento interno (2rem em cima/baixo, 1rem nos lados) */
+    display: flex; /* Habilita o layout flexbox */
+    flex-direction: column; /* Organiza os itens em coluna */
+    align-items: center; /* Alinha os itens verticalmente ao centro */
+    position: sticky; /* Mantém o cabeçalho fixo no topo ao rolar a página */
+    top: 0; /* Posição do topo quando sticky */
+    background: var(--header-bg); /* Fundo semitransparente para efeito glassmorphism */
+    z-index: 10; /* Define a ordem de empilhamento para ficar sobre outros elementos */
+    border-bottom: 1px solid var(--header-border); /* Borda inferior sutil */
+    backdrop-filter: blur(10px); /* Efeito de desfoque para o "vidro" */
+    gap: 1.5rem; /* Espaçamento entre os elementos flex */
+}
+
+/* Contêiner para o botão de limpar filtro */
+#filter-status {
+    margin-top: -0.5rem;
+    height: 2rem;
+}
+
+.clear-filter-button {
+    background-color: var(--accent-color-vibrant);
+    color: var(--bg-color);
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.clear-filter-button:hover {
+    background-color: var(--primary-color);
+}
+
+.header-title-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+#theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--tertiary-color);
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+#theme-toggle:hover {
+    color: var(--secondary-color);
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+/* Lógica para mostrar/esconder ícones de sol/lua */
+.moon { display: block; }
+.sun { display: none; }
+body.light-mode .moon { display: none; }
+body.light-mode .sun { display: block; }
+
+header h1 {
+    font-size: 1.5rem; /* Tamanho da fonte */
+    margin: 0; /* Remove a margem padrão */
+    font-weight: 500; /* Peso da fonte (médio) */
+    white-space: nowrap; /* Impede a quebra de linha do texto */
+    transition: color 0.3s ease;
+    color: var(--secondary-color);
+}
+
+/* Garante que o container do formulário ocupe o espaço necessário */
+.search-form-container {
+    width: 100%;
+    max-width: 80rem; /* Alinha com a largura máxima do main */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-form {
+    position: relative;
+    width: 100%;
+    max-width: 40rem;
+}
+
+input[type="search"] {
+    padding: 0.75rem 3.5rem 0.75rem 1.5rem; /* Espaçamento interno (direita maior para o ícone) */
+    border-radius: 1rem; /* Arredonda as bordas */
+    border: 1px solid var(--tertiary-color); /* Define a borda */
+    background: var(--bg-color); /* Cor de fundo */
+    font-family: inherit; /* Herda a família da fonte do elemento pai */
+    font-size: 1.1rem; /* Tamanho da fonte */
+    transition: all 0.2s ease; /* Adiciona uma transição suave para todas as propriedades */
+    width: 100%;
+    color: var(--secondary-color); /* Cor do texto digitado */
+}
+
+input[type="search"]::placeholder {
+    font-size: 1.1rem; /* Tamanho da fonte do placeholder */
+    font-weight: 300; /* Peso da fonte do placeholder */
+    color: var(--tertiary-color); /* Cor do texto do placeholder */
+}
+
+input[type="search"]:focus {
+    outline: none; /* Remove a borda de foco padrão */
+    border-color: transparent;
+    animation: aurora-focus 2s linear infinite;
+}
+
+/* Animação para o foco do input */
+@keyframes aurora-focus {
+    0% { box-shadow: 0 0 0 0.2rem #00bcd4; }
+    25% { box-shadow: 0 0 0 0.2rem #8ab4f8; }
+    50% { box-shadow: 0 0 0 0.2rem #9c27b0; }
+    75% { box-shadow: 0 0 0 0.2rem #8ab4f8; }
+    100% { box-shadow: 0 0 0 0.2rem #00bcd4; }
+}
+
+#botao-busca {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer; /* Muda o cursor para uma mão ao passar por cima */
+    background-color: var(--botao-busca-bg, var(--tertiary-color));
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-color 0.2s ease;
+}
+
+#botao-busca:hover {
+    background-color: var(--accent-color-vibrant);
+}
+
+body.light-mode #botao-busca {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='black' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1z'/%3E%3C/svg%3E");
+}
+
+#botao-busca:active {
+    transform: scale(0.98); /* Efeito de clique (diminui o tamanho) */
+}
+
+/* Animação para os cards aparecerem suavemente */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo para a mensagem de "nenhum resultado" */
+.no-results {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--tertiary-color);
+    margin-top: 4rem;
+}
+
+main {
+    max-width: 80rem; /* Largura máxima do conteúdo principal */
+    margin: 2rem auto; /* Centraliza o conteúdo principal horizontalmente */
+    padding: 0 1rem; /* Adiciona padding lateral para não colar nas bordas */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+    main {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+}
+
+article.card {
+    background: var(--card-bg-color); /* Fundo do card sutilmente mais claro */
+    margin-top: 2rem; /* Margem no topo */
+    border-radius: 0.5rem; /* Bordas arredondadas */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra sutil para profundidade */
+    border: 1px solid var(--tertiary-color); /* Borda sutil */
+    overflow: hidden; /* Garante que o conteúdo interno não vaze durante a animação */
+    cursor: pointer; /* Muda o cursor para uma mão */
+    position: relative; /* Necessário para o pseudo-elemento da borda */
+    transition: opacity 0.4s ease, transform 0.1s ease; /* Transição rápida para o tilt */
+    transform-style: preserve-3d; /* Habilita o contexto 3D */
+}
+
+/* Aplica a animação aos cards */
+article.card.fade-in-up {
+    opacity: 0; /* Começa invisível para a animação */
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+article.card:hover {
+    /* O transform agora é controlado pelo JS. Apenas a sombra e a cor mudam aqui */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); /* Sombra mais pronunciada no hover */
+    background-color: #313235;
+    border-color: transparent; /* Esconde a borda sólida para mostrar a animada */
+    transition: opacity 0.4s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+
+body.light-mode article.card:hover {
+    border-color: transparent; /* Esconde a borda sólida para mostrar a animada */
+    transition: opacity 0.4s ease, transform 0.1s ease, box-shadow 0.3s ease;
+}
+
+/* Esconde os outros cards quando um está focado */
+body.card-focado article.card:not(.card--focado) {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+/* Borda RGB animada no hover */
+article.card:hover::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: var(--aurora-gradient);
+    background-size: 400% 400%;
+    z-index: -1;
+    animation: aurora-border 4s linear infinite;
+}
+
+/* Desativa a borda RGB no hover quando o card está focado */
+article.card--focado:hover::before {
+    content: none;
+    animation: none;
+}
+
+@keyframes aurora-border {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+ 
+.card-header {
+    padding: 1.5rem;
+    position: relative; /* Necessário para posicionar o ícone indicador */
+    transition: transform 0.1s ease;
+}
+
+/* Ícone indicador de expandir/recolher */
+.card-header::after {
+    content: '+';
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--tertiary-color);
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s ease;
+}
+
+article.card.active .card-header::after {
+    transform: rotate(45deg); /* Gira o '+' para formar um 'x' */
+    color: var(--accent-color-vibrant);
+}
+
+/* Estilos para as tags */
+.card-tags-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.card-tag {
+    background-color: rgba(138, 180, 248, 0.15);
+    color: var(--primary-color);
+    border: 1px solid rgba(138, 180, 248, 0.3);
+    padding: 0.25rem 0.6rem;
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.card-tag:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+}
+
+body.light-mode .card-tag:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* Esconde o conteúdo detalhado por padrão */
+.card-content {
+    display: none;
+}
+
+/* Exibe o conteúdo detalhado apenas no card focado */
+article.card--focado .card-content {
+    display: block;
+}
+
+/* Estilos para o card quando está focado (modal) */
+article.card--focado {
+    position: fixed;
+    inset: 5vh 5vw; /* Equivalente a top/bottom: 5vh, left/right: 5vw */
+    z-index: 100;
+    cursor: default;
+    overflow-y: auto;
+    padding: 2rem 3rem;
+}
+
+/* Botão de fechar o card focado */
+.card-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    background: var(--card-bg-color);
+    color: white;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+    cursor: pointer;
+    z-index: 110;
+    opacity: 0; /* Invisível por padrão */
+    pointer-events: none; /* Não clicável quando invisível */
+    transition: opacity 0.3s 0.2s ease, transform 0.2s ease;
+}
+
+body.light-mode .card-close-button {
+    color: var(--secondary-color);
+}
+
+article.card--focado .card-close-button {
+    opacity: 1; /* Visível apenas no card focado */
+    pointer-events: auto; /* Clicável quando visível */
+}
+
+article h2 {
+    margin-top: 0; /* Remove a margem superior */
+    font-weight: 600; /* Peso da fonte */
+    font-size: 1.6rem; /* Tamanho da fonte */
+    border-bottom: none; /* Sem borda inferior */
+    padding-bottom: 0; /* Sem espaçamento interno inferior */
+    margin-bottom: 0.5rem; /* Margem inferior ajustada */
+    color: var(--primary-color); /* Cor do texto */
+}
+
+article p {
+    margin: 0.5rem 0; /* Margem superior e inferior */
+    line-height: 1.6; /* Altura da linha para melhor legibilidade */
+    font-size: 1rem;
+    color: var(--secondary-color); /* Cor do texto */
+}
+
+/* Melhora o espaçamento entre parágrafos no conteúdo detalhado */
+.card-content p {
+    margin-bottom: 1.25rem;
+}
+
+article p strong {
+    color: var(--tertiary-color); /* Cor do texto em negrito */
+    font-weight: 400; /* Peso da fonte */
+}
+
+article a {
+    color: var(--accent-color-vibrant); /* Cor do link */
+    text-decoration: none; /* Remove o sublinhado padrão */
+    font-weight: 500; /* Peso da fonte */
+    display: inline-block;
+    margin-top: 1rem;
+    transition: color 0.2s ease;
+}
+
+article a:hover {
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+    color: var(--primary-color);
+}
+
+/* Ícone de seta para o link externo */
+article a::after {
+    content: ' →';
+    display: inline-block;
+    font-family: sans-serif;
+    font-weight: bold;
+    transition: transform 0.2s ease-out;
+    transform-origin: center;
+}
+
+.footer {
+    position: relative; /* Posição relativa para fluir com o conteúdo */
+    left: 0; /* Alinha à esquerda */
+    width: 100%; /* Largura total */
+    color: var(--tertiary-color); /* Cor do texto */
+    background-color: var(--bg-color); /* Cor de fundo */
+    padding: 15px 20px; /* Espaçamento interno */
+    border-top: 1px solid var(--footer-border); /* Borda superior */
+    font-size: 0.8rem; /* Tamanho da fonte */
+    margin-top: 3rem; /* Espaço acima do rodapé */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-title {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--tertiary-color);
+    margin: 0 0 1rem 0;
+    text-align: center;
+}
+.footer-location {
+    color: #9aa0a6; /* Cor do texto */
+    margin-bottom: 10px; /* Margem inferior */
+}
+
+.footer-links {
+    list-style: none; /* Remove os marcadores da lista */
+    display: flex; /* Habilita o layout flexbox */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    gap: 15px; /* Espaçamento entre os links */
+}
+
+.footer-links a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    background-color: #2d2e31;
+    border-radius: 50%;
+    color: var(--secondary-color); /* Cor do link */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-links a:hover {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    transform: scale(1.1);
+}
+
+body.light-mode .footer-links a:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    header { /* Estilos para telas com largura máxima de 768px */
+        flex-direction: column; /* Organiza os itens do cabeçalho em coluna */
+        padding: 1rem; /* Reduz o espaçamento interno */
+    }
+
+    header h1 { /* Estilos para o h1 no cabeçalho em telas menores */
+        text-align: center; /* Centraliza o texto */
+        margin-bottom: 1rem; /* Adiciona margem inferior */
+    }
+
+    input[type="search"] { /* Estilos para o input em telas menores */
+        width: 100%; /* Largura baseada na largura da viewport */
+        font-size: 1rem; /* Reduz o tamanho da fonte */
+        padding: 0.6rem 3rem 0.6rem 1rem;
+    }
+
+    article.card:hover { /* Estilos para o article em telas menores */
+        transform: none !important; /* Remove o efeito de escala ao passar o mouse */
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 { /* Estilos para o h1 em telas com largura máxima de 480px */
+        font-size: 1rem; /* Reduz ainda mais o tamanho da fonte */
+        max-width: 70%; /* Define uma largura máxima */
+        word-wrap: break-word; /* Permite a quebra de palavras longas */
+    }
+
+    input[type="search"], /* Estilos para o input e seu placeholder em telas muito pequenas */
+    input[type="search"]::placeholder {
+        font-size: 0.9rem; /* Reduz o tamanho da fonte */
+    }
+
+    article h2 { /* Estilos para o h2 do article em telas muito pequenas */
+        font-size: 1.3rem; /* Reduz o tamanho da fonte */
+    }
+
+    /* Estilos para a div do cabeçalho em telas muito pequenas */
+    .search-form-container {
+        width: 100%;
+    }
+
+    .footer { /* Estilos para o rodapé em telas muito pequenas */
+        display: none; /* Oculta o rodapé */
+    }
+
+    button { /* Estilos para o botão em telas muito pequenas */
+        margin-top: 1rem; /* Adiciona margem no topo */
+    }
+}
