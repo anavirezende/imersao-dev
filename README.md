@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/anavirezende/qa-insights/main/assets/logo.png" alt="QA Insights Logo" width="150">
+  <img src="./assets/logo.png" alt="QA Insights Logo" width="150">
 </p>
 
 <h1 align="center">QA Insights - Base de Conhecimento Interativa</h1>
@@ -18,7 +18,7 @@
   <em>Pré-visualização do projeto em ação.</em>
 </p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/anavirezende/qa-insights/main/assets/preview.gif" alt="Demonstração do QA Insights">
+  <img src="./assets/preview.gif" alt="Demonstração do QA Insights">
 </p>
 
 ## ✨ Funcionalidades Principais
